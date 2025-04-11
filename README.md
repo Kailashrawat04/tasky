@@ -6,18 +6,18 @@ Task 2: Tailwind CSS v4 Setup ✔️
 
 Task 3: Creating Required Files and Folders ✔️
 
-Task 4: Defining App Routes
+Task 4: Defining App Routes✔️
 
 Backend
-Task 5: Backend Project Setup
+Task 5: Backend Project Setup✔️
 
-Task 6: Configuring MongoDB
+Task 6: Configuring MongoDB✔️
 
-Task 7: Defining User MongoDB Schema
+Task 7: Defining User MongoDB Schema✔️
 
-Task 8: Defining Task MongoDB Schema
+Task 8: Defining Task MongoDB Schema✔️
 
-Task 9: Creating Authentication APIs (Login, Sign-Up, Get User Info, Profile Image Upload)
+Task 9: Creating Authentication APIs (Login, Sign-Up, Get User Info, Profile Image Upload)✔️
 
 Task 10: Creating User Management APIs (Get All Users and Get a Specific User Details)
 

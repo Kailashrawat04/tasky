@@ -12,36 +12,51 @@ const generateToken = (userId) => {
  // @access  Public
  //
 const registerUser = async (req, res) => {
-  try{} catch(err) {
-    const { name, email, password ,profileImageUrl,adminInviteToken}
-     = req.body;
+  try {
+    const { name, email, password, profileImageUrl, adminInviteToken } = req.body;
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ msg: "User already exists" });
+    }
+    
+    // Validate and assign role
+    let role = "member";
+    if (adminInviteToken) {
+      if (!process.env.ADMIN_INVITE_TOKEN) {
+        console.error('ADMIN_INVITE_TOKEN is not configured in environment variables');
+        return res.status(500).json({ 
+          msg: "Admin registration is not properly configured",
+          code: "ADMIN_CONFIG_MISSING" 
+        });
       }
-      // determine user role : admin if correct token is provided, otherwise Member
-      let role = "member";
-      if (adminInviteToken && adminInviteToken == process.env.ADMIN_INVITE_TOKEN) {
+      if (adminInviteToken == process.env.ADMIN_INVITE_TOKEN) {
         role = "admin";
+      } else {
+        console.warn(`Invalid admin invite token attempt from ${email}`);
+        return res.status(400).json({ 
+          msg: "Invalid admin invite token",
+          code: "INVALID_ADMIN_TOKEN" 
+        });
       }
+    }
 
-      // Hash password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-      // Create new user
-      const user = await User.create ({
-        name,
-        email,
-        password: hashedPassword,
-        profileImageUrl,
-        role,
-      });
+    // Create new user
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      profileImageUrl,
+      role,
+    });
 
     // Return user data with JWT 
-    res.status(201).json({
+    return res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -49,9 +64,9 @@ const registerUser = async (req, res) => {
       role: user.role,
       token: generateToken(user._id), 
     });
-
+  } catch(err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -69,8 +84,9 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Campare password
-    if(!isMatch) {
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
