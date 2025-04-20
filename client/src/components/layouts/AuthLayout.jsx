@@ -3,14 +3,14 @@ import UI_IMG from "../../assets/image/image.png";
 
 const AuthLayout = ({children}) => {
     return <div className="flex">
-    <div className="w-screen h-screen md:w-[60vw] px-12 pt-8 pb-12">
+    <div className="w-full h-screen md:w-[60vw] px-12 pt-8 pb-12">
       <h2 className="text-lg font-medium text-black">Task Manager</h2>
       {children}
     </div>
 
-    <div className="hidden md:flex w-[40vw] h-screen items-center justify-center bg-blue-50 bg-[url('bg-image.png')] bg-cover bg-no-repeat bg-center overflow-hidden p-8">
+    <div className="hidden md:flex w-[40vw] h-screen py-6 overflow-hidden">
 
-      <img src={UI_IMG} className="" />
+      <img src={UI_IMG} className="w-full object-contain mx-auto" />
     </div>
   </div>;
 };
