@@ -31,7 +31,35 @@ const Signup = () => {
     }
 
     setError("")
-    // Add signup API call here
+
+    try {
+      const response = await axiosInstance.post('/auth/register', {
+        fullName,
+        email,
+        password,
+        adminInviteToken,
+        profile,
+      })
+
+      const { token, role } = response.data
+
+      if (token) {
+        localStorage.setItem('token', token)
+
+        // Redirect based on role
+        if (role === 'admin') {
+          window.location.href = '/admin/dashboard'
+        } else {
+          window.location.href = '/'
+        }
+      }
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        setError(error.response.data.message)
+      } else {
+        setError('Something went wrong. Please try again later.')
+      }
+    }
   }
 
   return (
@@ -74,6 +102,7 @@ const Signup = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Min 8 Characters"
+                autoComplete="new-password"
               />
             </div>
             <div>

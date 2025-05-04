@@ -1,10 +1,11 @@
 import React from 'react'
 import{ BrowserRouter as Router,
    Routes,
-   Route }
+   Route,
+   Navigate }
 from 'react-router-dom'
 import Login from './pages/Auth/Login'
-import Signup from './pages/Auth/Signup'
+import Signup from './pages/Auth/SignUp'
 import Dashboard from './pages/admin/Dashboard'
 import ManageTasks from './pages/admin/ManageTasks'
 import CreateTask from './pages/admin/CreateTask'
@@ -20,7 +21,7 @@ const App = () => {
     <div >
     <Router>
        <Routes>
-       
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {/* Admin Routes */}
