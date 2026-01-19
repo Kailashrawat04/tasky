@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'
+import axiosInstance from '../../utils/axiosInstance'
 
 const Signup = () => {
   const [profile, setProfile] = useState(null)
@@ -9,6 +11,8 @@ const Signup = () => {
   const [password, setPassword] = useState("")
   const [adminInviteToken, setAdminInviteToken] = useState("")
   const [error, setError] = useState(null)
+
+  const navigate = useNavigate()
 
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email)
 
@@ -34,24 +38,18 @@ const Signup = () => {
 
     try {
       const response = await axiosInstance.post('/auth/register', {
-        fullName,
+        name: fullName,
         email,
         password,
         adminInviteToken,
-        profile,
+        profileImageUrl: profile, // Assuming profile is the URL/base64? Logic might need check but variable name mapping is key
       })
 
       const { token, role } = response.data
 
       if (token) {
         localStorage.setItem('token', token)
-
-        // Redirect based on role
-        if (role === 'admin') {
-          window.location.href = '/admin/dashboard'
-        } else {
-          window.location.href = '/'
-        }
+        navigate(role === 'admin' ? '/admin/dashboard' : '/')
       }
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -128,9 +126,9 @@ const Signup = () => {
 
           <p className="text-sm mt-4">
             Already have an account?{' '}
-            <a href="/login" className="text-blue-600 font-semibold hover:underline">
+            <Link to="/login" className="text-blue-600 font-semibold hover:underline">
               Login
-            </a>
+            </Link>
           </p>
         </form>
       </div>
