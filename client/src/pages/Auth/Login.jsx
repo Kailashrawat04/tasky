@@ -34,8 +34,13 @@ const Login = () => {
 
             if (response.data && response.data.token) {
                 localStorage.setItem("token", response.data.token);
-                // Redirect based on role? For now detailed in plan as dashboard
-                navigate("/admin/dashboard");
+
+                // Redirect based on role
+                if (response.data.role === 'admin') {
+                    navigate("/admin/dashboard");
+                } else {
+                    navigate("/user/user-dashboard");
+                }
             }
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
