@@ -44,12 +44,12 @@ const Login = () => {
     return (
         <AuthLayout>
             <div className="lg:w-[70%] h-full md:h-full flex flex-col justify-center ">
-                <h3 className=" text-xl font-semibold text-black"> Welcome Back</h3>
-                <p className="text-xs text-slate-700 mt-[5px] mb-6">
+                <h3 className=" text-2xl font-bold text-black mb-1"> Welcome Back</h3>
+                <p className="text-sm text-slate-700 mb-8">
                     Please enter your details to login
                 </p>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-1">
                     <Input
                         value={email}
                         onChange={({ target }) => setEmail(target.value)}

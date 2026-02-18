@@ -30,13 +30,13 @@ Task 13 : Building the Login Form UI✔️
 
 Task 14 : Building the Sign-Up Form UI✔️
 
-Task: Defining API Paths
+Task: Defining API Paths✔️
 
 Task: Creating Axios Instance
 
 Task: Integrating Login API
 
-Task: Integrating Sign-Up API
+Task: Integrating Sign-Up API✔️
 
 Dashboard Page
 Task: Creating the Dashboard Page Layout

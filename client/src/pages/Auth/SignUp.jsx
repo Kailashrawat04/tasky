@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector'
-import axiosInstance from '../../utils/axiosInstance'
+import Input from '../../components/Inputs/Input'
+import { validateEmail } from '../../utils/helper'
+import { useUserContext } from '../../context/UserContext'
+import uploadImage from '../../utils/uploadimages'
 
 const Signup = () => {
   const [profile, setProfile] = useState(null)
@@ -12,9 +15,8 @@ const Signup = () => {
   const [adminInviteToken, setAdminInviteToken] = useState("")
   const [error, setError] = useState(null)
 
+  const { register } = useUserContext()
   const navigate = useNavigate()
-
-  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email)
 
   const handleSignup = async (e) => {
     e.preventDefault()
@@ -36,97 +38,90 @@ const Signup = () => {
 
     setError("")
 
-    try {
-      const response = await axiosInstance.post('/auth/register', {
-        name: fullName,
-        email,
-        password,
-        adminInviteToken,
-        profileImageUrl: profile, // Assuming profile is the URL/base64? Logic might need check but variable name mapping is key
-      })
+    let profileImageUrl = null;
 
-      const { token, role } = response.data
+    if (profile) {
+      try {
+        const uploadResponse = await uploadImage(profile);
+        profileImageUrl = uploadResponse.imageUrl;
+      } catch (err) {
+        console.error("Image upload failed:", err);
+        setError("Failed to upload profile image. Please try again.");
+        return;
+      }
+    }
 
-      if (token) {
-        localStorage.setItem('token', token)
-        navigate(role === 'admin' ? '/admin/dashboard' : '/')
-      }
-    } catch (error) {
-      if (error.response && error.response.data.message) {
-        setError(error.response.data.message)
-      } else {
-        setError('Something went wrong. Please try again later.')
-      }
+    const userData = {
+      name: fullName,
+      email,
+      password,
+      adminInviteToken,
+      profileImageUrl: profileImageUrl
+    }
+
+    const result = await register(userData);
+
+    if (result.success) {
+      navigate('/');
+    } else {
+      setError(result.message);
     }
   }
 
   return (
     <AuthLayout>
-      <div className="max-w-xl mx-auto text-center">
-        <h1 className="text-xl font-semibold text-black mb-1">Create an Account</h1>
-        <p className="text-sm text-gray-600 mb-6">
+      <div className="lg:w-[100%] h-full md:h-full flex flex-col justify-center">
+        <h3 className="text-xl font-semibold text-black">Create an Account</h3>
+        <p className="text-xs text-slate-700 mt-[5px] mb-6">
           Join us today by entering your details below.
         </p>
 
-        <form onSubmit={handleSignup} className="space-y-6">
+        <form onSubmit={handleSignup} className="flex flex-col gap-4">
           <ProfilePhotoSelector image={profile} setImage={setProfile} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="John"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email Address</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="john@example.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Min 8 Characters"
-                autoComplete="new-password"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Admin Invite Token</label>
-              <input
-                type="text"
-                value={adminInviteToken}
-                onChange={(e) => setAdminInviteToken(e.target.value)}
-                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="6 Digit Code"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              value={fullName}
+              onChange={({ target }) => setFullName(target.value)}
+              label="Full Name"
+              placeholder="John Doe"
+              type="text"
+            />
+            <Input
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
+              label="Email Address"
+              placeholder="john@example.com"
+              type="text"
+            />
+            <Input
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+              label="Password"
+              placeholder="Min 8 Characters"
+              type="password"
+            />
+            <Input
+              value={adminInviteToken}
+              onChange={({ target }) => setAdminInviteToken(target.value)}
+              label="Admin Invite Token"
+              placeholder="6 Digit Code (Optional)"
+              type="text"
+            />
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="btn-primary"
           >
             SIGN UP
           </button>
 
-          <p className="text-sm mt-4">
+          <p className="text-[13px] text-slate-800 mt-3 text-center">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 font-semibold hover:underline">
+            <Link to="/login" className="font-medium underline">
               Login
             </Link>
           </p>

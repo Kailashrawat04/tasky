@@ -7,10 +7,10 @@ const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
- //@desc    Register a new user
- // @route   POST /api/auth/register
- // @access  Public
- //
+//@desc    Register a new user
+// @route   POST /api/auth/register
+// @access  Public
+//
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, profileImageUrl, adminInviteToken } = req.body;
@@ -20,24 +20,24 @@ const registerUser = async (req, res) => {
     if (userExists) {
       return res.status(400).json({ msg: "User already exists" });
     }
-    
+
     // Validate and assign role
     let role = "member";
     if (adminInviteToken) {
       if (!process.env.ADMIN_INVITE_TOKEN) {
         console.error('ADMIN_INVITE_TOKEN is not configured in environment variables');
-        return res.status(500).json({ 
+        return res.status(500).json({
           msg: "Admin registration is not properly configured",
-          code: "ADMIN_CONFIG_MISSING" 
+          code: "ADMIN_CONFIG_MISSING"
         });
       }
       if (adminInviteToken == process.env.ADMIN_INVITE_TOKEN) {
         role = "admin";
       } else {
         console.warn(`Invalid admin invite token attempt from ${email}`);
-        return res.status(400).json({ 
+        return res.status(400).json({
           msg: "Invalid admin invite token",
-          code: "INVALID_ADMIN_TOKEN" 
+          code: "INVALID_ADMIN_TOKEN"
         });
       }
     }
@@ -62,21 +62,24 @@ const registerUser = async (req, res) => {
       email: user.email,
       profileImageUrl: user.profileImageUrl,
       role: user.role,
-      token: generateToken(user._id), 
+      token: generateToken(user._id),
     });
-  } catch(err) {
+  } catch (err) {
     console.error(err);
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "User already exists" });
+    }
     return res.status(500).json({ message: "Server error" });
   }
 };
 
 
- // @desc    Login user
- //@route   POST /api/auth/login
- // @access  Public
- 
-const loginUser = async (req, res) => { 
-  try{
+// @desc    Login user
+//@route   POST /api/auth/login
+// @access  Public
+
+const loginUser = async (req, res) => {
+  try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -102,33 +105,35 @@ const loginUser = async (req, res) => {
 
 
 
-} catch(err) {
-  console.error(err);
-  res.status(500).json({ message: "Server error" });
-}};
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 // @desc    Get user profile
- // @route   GET /api/auth/profile
- //@access  Private (Requires JWT) 
-const getUserProfile = async (req, res) => { 
-  try{
+// @route   GET /api/auth/profile
+//@access  Private (Requires JWT) 
+const getUserProfile = async (req, res) => {
+  try {
 
-   const user = await User.findById(req.user.id).select("-password");
-   if (!user) {
-     return res.status(404).json({ message: "User not found" });
-   }
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-   res.json(user);
-} catch(err) {
-  console.error(err);
-  res.status(500).json({ message: "Server error" });
-}};
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 // @desc    Update user profile
- // @route   PUT /api/auth/profile
- //@access  Private (Requires JWT) 
-const updateUserProfile = async (req, res) => { 
-  try{
+// @route   PUT /api/auth/profile
+//@access  Private (Requires JWT) 
+const updateUserProfile = async (req, res) => {
+  try {
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -137,7 +142,7 @@ const updateUserProfile = async (req, res) => {
 
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    
+
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(req.body.password, salt);
@@ -154,10 +159,11 @@ const updateUserProfile = async (req, res) => {
       token: generateToken(updatedUser._id),
     });
 
-  } catch(err) {
-  console.error(err);
-  res.status(500).json({ message: "Server error" });
-}};
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 
@@ -165,5 +171,5 @@ module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
-    updateUserProfile,
+  updateUserProfile,
 };
