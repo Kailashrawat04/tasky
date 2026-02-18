@@ -21,4 +21,20 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+// Response interceptor to handle responses and errors
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    // Handle 401 Unauthorized errors (e.g., token expired)
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+      // Redirect to login page
+      window.location.href = "/login";
+    }
+    return Promise.reject(error); // Propagate error
+  }
+);
+
 export default axiosInstance;

@@ -3,13 +3,14 @@ import { useNavigate, Link } from 'react-router-dom'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import Input from '../../components/Inputs/Input'
 import { validateEmail } from '../../utils/helper'
-import axiosInstance from '../../utils/axiosInstance'
+import { useUserContext } from '../../context/UserContext.jsx'
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
+    const { login } = useUserContext();
     const navigate = useNavigate();
 
     // Handle Login form Submit
@@ -26,28 +27,17 @@ const Login = () => {
         }
         setError("");
 
-        try {
-            const response = await axiosInstance.post("/auth/login", {
-                email,
-                password,
-            });
+        const result = await login(email, password);
 
-            if (response.data && response.data.token) {
-                localStorage.setItem("token", response.data.token);
-
-                // Redirect based on role
-                if (response.data.role === 'admin') {
-                    navigate("/admin/dashboard");
-                } else {
-                    navigate("/user/user-dashboard");
-                }
-            }
-        } catch (error) {
-            if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
+        if (result.success) {
+            // Redirect based on role
+            if (result.user.role === 'admin') {
+                navigate("/admin/dashboard");
             } else {
-                setError("An unexpected error occurred. Please try again.");
+                navigate("/user/user-dashboard");
             }
+        } else {
+            setError(result.message);
         }
     };
 

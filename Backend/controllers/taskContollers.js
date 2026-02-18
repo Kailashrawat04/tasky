@@ -106,7 +106,7 @@ const createTask = async (req, res) => {
         const task = await Task.create({
             title,
             description,
-            priority,
+            priority: priority?.toLowerCase(),
             dueDate,
             assignedTo,
             createdBy: req.user._id,
@@ -121,7 +121,8 @@ const createTask = async (req, res) => {
 
     }
     catch (error) {
-        res.status(500).json({ message: "Server Error" });
+        console.error("Error creating task:", error);
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
 
@@ -145,7 +146,7 @@ const updateTask = async (req, res) => {
         // Update fields only if they're defined
         if (req.body.title != null) task.title = req.body.title;
         if (req.body.description != null) task.description = req.body.description;
-        if (req.body.priority != null) task.priority = req.body.priority;
+        if (req.body.priority != null) task.priority = req.body.priority.toLowerCase();
         if (req.body.dueDate != null) task.dueDate = req.body.dueDate;
         if (req.body.todoChecklist != null) task.todoChecklist = req.body.todoChecklist;
         if (req.body.attachments != null) task.attachments = req.body.attachments;
@@ -299,7 +300,7 @@ const updateTaskChecklist = async (req, res) => {
         } else if (task.progress === 100) {
             task.status = "completed";
         } else {
-            task.status = "In-progress";
+            task.status = "in-progress";
         }
 
         await task.save();

@@ -21,14 +21,14 @@ Task 9: Creating Authentication APIs (Login, Sign-Up, Get User Info, Profile Ima
 
 Task 10: Creating User Management APIs (Get All Users and Get a Specific User Details)
 
-Task 11: Creating Task Management APIs (Get All Tasks, Create Task, Update Task, Update Task Status, etc.)
+Task 11: Creating Task Management APIs (Get All Tasks, Create Task, Update Task, Update Task Status, etc.)✔️
 
-Task 12: Creating Report Generation APIs
+Task 12: Creating Report Generation APIs✔️
 
 Frontend (Continued)
-Task 13 : Building the Login Form UI
+Task 13 : Building the Login Form UI✔️
 
-Task 14 : Building the Sign-Up Form UI
+Task 14 : Building the Sign-Up Form UI✔️
 
 Task: Defining API Paths
 
