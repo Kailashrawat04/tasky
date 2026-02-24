@@ -5,7 +5,11 @@
     --font-display: 'Poppins', sans-serif;
     --breakpoint-3xl: 1920px;
     --color-primary: #1368EC;
-
+    --color-navy: #0F172A;
+    --color-slate-900: #0F172A;
+    --color-slate-800: #1E293B;
+    --color-slate-700: #334155;
+    --color-slate-100: #F1F5F9;
 }
 
 @layer base {
@@ -14,15 +18,33 @@
     }
 
     body {
-        background-color: #fcfbfc;
+        background-color: #F8FAFC;
         @apply text-slate-800;
     }
 }
 
-.input-box {
-    @apply w-full flex items-center justify-between gap-3 text-sm text-black bg-slate-100/50 rounded-lg px-4 py-3 mb-4 mt-2 border border-slate-200 outline-none focus-within:border-primary focus-within:bg-transparent transition-all duration-200 ease-in-out;
-}
+@layer components {
+    @utility glass-card {
+        @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+    }
 
-.btn-primary {
-    @apply w-full text-sm font-medium text-white bg-primary shadow-lg shadow-purple-600/5 px-[10px] py-2.5 rounded-lg my-1 hover:bg-blue-600 active:scale-95 transition-all duration-200 cursor-pointer;
+    .sidebar-link {
+        @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:text-white hover:bg-white/10 mx-2;
+    }
+
+    .sidebar-link-active {
+        @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-white bg-primary shadow-lg shadow-primary/20 mx-2;
+    }
+
+    .input-box {
+        @apply w-full flex items-center justify-between gap-3 text-sm text-black bg-white rounded-xl px-4 py-3 mb-4 mt-2 border border-slate-200 outline-none focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-200 ease-in-out shadow-sm;
+    }
+
+    .btn-primary {
+        @apply w-full text-sm font-semibold text-white bg-primary shadow-lg shadow-primary/20 px-6 py-3 rounded-xl my-1 hover:bg-blue-600 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2;
+    }
+
+    .stat-card {
+        @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl p-8 rounded-3xl flex flex-col gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 active:scale-[0.98];
+    }
 }
