@@ -9,7 +9,10 @@ import {
   FiCheckCircle,
   FiAlertCircle,
   FiTrendingUp,
+<<<<<<< HEAD
   FiPlusSquare,
+=======
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
 } from "react-icons/fi";
 import {
   BarChart,
@@ -69,6 +72,7 @@ const Dashboard = () => {
   const PRIORITY_COLORS = ["#10b981", "#f59e0b", "#ef4444"];
 
   return (
+<<<<<<< HEAD
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -85,6 +89,16 @@ const Dashboard = () => {
             <FiPlusSquare /> Create New Task
           </button>
         </div>
+=======
+    <div className="space-y-8 animate-in fade-in duration-500">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Admin Dashboard</h1>
+          <p className="text-slate-500 mt-1">
+            Welcome back! Here's what's happening today.
+          </p>
+        </div>
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
       </div>
 
       {/* Stats Grid */}
@@ -117,6 +131,7 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Task Distribution Chart */}
+<<<<<<< HEAD
         <div className="lg:col-span-2 glass-card p-8 rounded-3xl">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
@@ -145,33 +160,68 @@ const Dashboard = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Bar>
+=======
+        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200">
+          <div className="flex items-center gap-2 mb-6">
+            <FiTrendingUp className="text-primary" />
+            <h3 className="font-bold text-slate-800">Task Status Overview</h3>
+          </div>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={distributionData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                <Tooltip
+                  cursor={{ fill: '#f8fafc' }}
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                />
+                <Bar dataKey="value" fill="#1368EC" radius={[6, 6, 0, 0]} barSize={40} />
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Priority Breakdown */}
+<<<<<<< HEAD
         <div className="glass-card p-8 rounded-3xl">
           <h3 className="font-black text-navy text-lg mb-8">Priority Mix</h3>
+=======
+        <div className="bg-white p-6 rounded-2xl border border-slate-200">
+          <h3 className="font-bold text-slate-800 mb-6">Priority Breakdown</h3>
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
           <div className="h-64 flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={priorityData}
+<<<<<<< HEAD
                   innerRadius={70}
                   outerRadius={90}
                   paddingAngle={8}
                   dataKey="value"
                   stroke="none"
+=======
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
                 >
                   {priorityData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={PRIORITY_COLORS[index]} />
                   ))}
                 </Pie>
+<<<<<<< HEAD
                 <Tooltip
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px', fontWeight: '700' }} />
+=======
+                <Tooltip />
+                <Legend verticalAlign="bottom" height={36} />
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -180,6 +230,7 @@ const Dashboard = () => {
 
       {/* Recent Tasks */}
       <div>
+<<<<<<< HEAD
         <div className="flex justify-between items-center mb-8">
           <div>
             <h3 className="font-black text-navy text-xl">Recent Tasks</h3>
@@ -190,6 +241,15 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+=======
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="font-bold text-slate-800">Recent Tasks</h3>
+          <button className="text-sm font-medium text-primary hover:underline">
+            View All Tasks
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
           {recentTasks?.map((task) => (
             <TaskCard key={task._id} task={task} isAdmin={true} />
           ))}

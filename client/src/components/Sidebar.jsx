@@ -28,6 +28,7 @@ const Sidebar = () => {
     const links = user?.role === "admin" ? adminLinks : userLinks;
 
     return (
+<<<<<<< HEAD
         <div className="w-68 h-[calc(100vh-73px)] bg-navy py-8 px-4 flex flex-col gap-2 sticky top-[73px] shadow-2xl z-40">
             <div className="px-6 mb-6 text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">
                 Main Menu
@@ -64,6 +65,30 @@ const Sidebar = () => {
                     </div>
                 </div>
             </div>
+=======
+        <div className="w-64 h-[calc(100vh-73px)] bg-white border-r border-slate-200 py-6 px-4 flex flex-col gap-2 sticky top-[73px]">
+            <div className="px-4 mb-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                Main Menu
+            </div>
+            {links.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                    <Link
+                        key={link.path}
+                        to={link.path}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${isActive
+                                ? "bg-primary text-white shadow-md shadow-primary/20"
+                                : "text-slate-600 hover:bg-slate-50 hover:text-primary"
+                            }`}
+                    >
+                        <span className={`${isActive ? "" : "group-hover:scale-110 transition-transform"}`}>
+                            {link.icon}
+                        </span>
+                        <span className="font-medium">{link.label}</span>
+                    </Link>
+                );
+            })}
+>>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
         </div>
     );
 };
