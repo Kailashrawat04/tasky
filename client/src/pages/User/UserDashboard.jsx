@@ -36,7 +36,6 @@ const UserDashboard = () => {
   const { statistics, recentTasks } = data || {};
 
   return (
-<<<<<<< HEAD
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -50,16 +49,6 @@ const UserDashboard = () => {
         <button className="btn-primary !w-auto">
           View My Calendar
         </button>
-=======
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">
-          Hello, {user?.name}!
-        </h1>
-        <p className="text-slate-500 mt-1">
-          Here's a look at your tasks and progress.
-        </p>
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -90,7 +79,6 @@ const UserDashboard = () => {
       </div>
 
       <div>
-<<<<<<< HEAD
         <div className="flex justify-between items-center mb-8">
           <div>
             <h3 className="font-black text-navy text-xl">Your Focus Tasks</h3>
@@ -98,27 +86,16 @@ const UserDashboard = () => {
           </div>
           <button className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-600 transition-all">
             Manage All
-=======
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="font-bold text-slate-800">Your Recent Tasks</h3>
-          <button className="text-sm font-medium text-primary hover:underline">
-            View All
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
           </button>
         </div>
 
         {recentTasks?.length > 0 ? (
-<<<<<<< HEAD
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-=======
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
             {recentTasks.map((task) => (
               <TaskCard key={task._id} task={task} />
             ))}
           </div>
         ) : (
-<<<<<<< HEAD
           <div className="glass-card border-dashed border-2 border-slate-200 rounded-3xl p-16 text-center animate-pulse">
             <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-6 text-primary/30">
               <FiBox size={40} />
@@ -126,15 +103,6 @@ const UserDashboard = () => {
             <h4 className="text-xl font-bold text-navy">Clear skies! No tasks here.</h4>
             <p className="text-slate-400 font-medium mt-2 max-w-sm mx-auto">
               You've cleared your assigned tasks for now. Enjoy the breather or check with your lead.
-=======
-          <div className="bg-white border border-dashed border-slate-300 rounded-2xl p-12 text-center">
-            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-              <FiBox size={32} />
-            </div>
-            <h4 className="text-lg font-medium text-slate-900">No tasks assigned yet</h4>
-            <p className="text-slate-500 mt-1">
-              Check back later or contact your administrator.
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
             </p>
           </div>
         )}

@@ -52,7 +52,6 @@ const ManageUsers = () => {
   }
 
   return (
-<<<<<<< HEAD
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -68,30 +67,12 @@ const ManageUsers = () => {
             type="text"
             placeholder="Search by name or email..."
             className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all shadow-sm text-sm font-medium placeholder:text-slate-400"
-=======
-    <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Manage Users</h1>
-          <p className="text-slate-500 mt-1">
-            View and manage all registered users in the system.
-          </p>
-        </div>
-
-        <div className="relative w-full md:w-80">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search by name or email..."
-            className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-primary transition-all shadow-sm"
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-<<<<<<< HEAD
       <div className="glass-card rounded-[32px] border-none shadow-2xl shadow-navy/5 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -107,28 +88,10 @@ const ManageUsers = () => {
                   Task Load
                 </th>
                 <th className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
-=======
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  User
-                </th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Role
-                </th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Tasks (P/I/C)
-                </th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
                   Actions
                 </th>
               </tr>
             </thead>
-<<<<<<< HEAD
             <tbody className="divide-y divide-slate-50">
               {filteredUsers.map((user) => (
                 <tr key={user._id} className="hover:bg-slate-50/50 transition-all duration-300 group">
@@ -154,53 +117,21 @@ const ManageUsers = () => {
                           {user.name}
                         </div>
                         <div className="text-[11px] font-bold text-slate-400 uppercase tracking-tight">
-=======
-            <tbody className="divide-y divide-slate-100">
-              {filteredUsers.map((user) => (
-                <tr key={user._id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      {user.profileImageUrl ? (
-                        <img
-                          src={user.profileImageUrl}
-                          alt=""
-                          className="w-10 h-10 rounded-full object-cover border border-slate-200"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200">
-                          <FiUser size={20} />
-                        </div>
-                      )}
-                      <div>
-                        <div className="font-semibold text-slate-900">
-                          {user.name}
-                        </div>
-                        <div className="text-xs text-slate-500">
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
                           {user.email}
                         </div>
                       </div>
                     </div>
                   </td>
-<<<<<<< HEAD
                   <td className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
                     <span
                       className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all ${user.role === "admin"
                         ? "bg-indigo-50 text-indigo-600 border-indigo-100"
                         : "bg-blue-50 text-blue-600 border-blue-100"
-=======
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${user.role === "admin"
-                          ? "bg-purple-100 text-purple-600 border-purple-200"
-                          : "bg-blue-100 text-blue-600 border-blue-200"
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
                         }`}
                     >
                       {user.role}
                     </span>
                   </td>
-<<<<<<< HEAD
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-3">
                       <div className="text-center group-hover:scale-110 transition-transform">
@@ -222,29 +153,11 @@ const ManageUsers = () => {
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <button className="p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all shadow-sm border border-transparent hover:border-primary/10">
-=======
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-amber-600 font-bold">{user.pendingTasks || 0}</span>
-                      <span className="text-slate-300">/</span>
-                      <span className="text-blue-600 font-bold">{user.inProgressTasks || 0}</span>
-                      <span className="text-slate-300">/</span>
-                      <span className="text-emerald-600 font-bold">{user.completedTasks || 0}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all">
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
                         <FiEdit2 size={18} />
                       </button>
                       <button
                         onClick={() => handleDeleteUser(user._id)}
-<<<<<<< HEAD
                         className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shadow-sm border border-transparent hover:border-rose-100"
-=======
-                        className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
                       >
                         <FiTrash2 size={18} />
                       </button>
@@ -256,17 +169,12 @@ const ManageUsers = () => {
           </table>
         </div>
         {filteredUsers.length === 0 && (
-<<<<<<< HEAD
           <div className="p-20 text-center">
             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
               <FiUser size={40} />
             </div>
             <h4 className="text-xl font-black text-navy">No Personnel Found</h4>
             <p className="text-slate-400 font-medium mt-2">Try adjusting your search criteria or add new members.</p>
-=======
-          <div className="p-12 text-center">
-            <p className="text-slate-500">No users found matching your search.</p>
->>>>>>> 42afac2100ca4fe80777534ebf338c9675773b58
           </div>
         )}
       </div>
