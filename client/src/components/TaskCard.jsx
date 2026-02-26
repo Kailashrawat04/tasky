@@ -32,7 +32,7 @@ const TaskCard = ({ task, isAdmin = false }) => {
 
     return (
         <div
-            onClick={() => navigate(isAdmin ? `/admin/tasks` : `/user/task-details/${task._id}`)}
+            onClick={() => navigate(`/user/task-details/${task._id}`)}
             className="stat-card group cursor-pointer relative overflow-hidden"
         >
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:bg-primary/10 transition-colors" />

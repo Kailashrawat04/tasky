@@ -147,7 +147,15 @@ const updateTask = async (req, res) => {
         if (req.body.title != null) task.title = req.body.title;
         if (req.body.description != null) task.description = req.body.description;
         if (req.body.priority != null) task.priority = req.body.priority.toLowerCase();
-        if (req.body.dueDate != null) task.dueDate = req.body.dueDate;
+
+        // Restriction: Only admin can change dueDate
+        if (req.body.dueDate != null) {
+            if (req.user.role !== "admin") {
+                return res.status(403).json({ message: "Only administrators can extend the due date" });
+            }
+            task.dueDate = req.body.dueDate;
+        }
+
         if (req.body.todoChecklist != null) task.todoChecklist = req.body.todoChecklist;
         if (req.body.attachments != null) task.attachments = req.body.attachments;
 
@@ -166,6 +174,33 @@ const updateTask = async (req, res) => {
             updatedTask,
         });
 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+// @desc   Attach file to task (Admin only)
+// @route  POST /api/tasks/:id/attach
+// @access Private
+const attachFile = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
+
+        const task = await Task.findById(req.params.id);
+        if (!task) return res.status(404).json({ message: "Task not found" });
+
+        const fileUrl = `/uploads/${req.file.filename}`;
+        task.attachments.push(fileUrl);
+        await task.save();
+
+        res.json({
+            message: "File attached successfully",
+            fileUrl,
+            task
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server Error" });
@@ -216,6 +251,11 @@ const updateTaskStatus = async (req, res) => {
 
         if (!isAssigned && req.user.role !== "admin") {
             return res.status(403).json({ message: "You are not authorized to update this task" });
+        }
+
+        // Overdue check: Non-admins cannot update status if due date passed
+        if (req.user.role !== "admin" && task.dueDate < new Date()) {
+            return res.status(403).json({ message: "Mission overdue. Only administrators can update status." });
         }
 
         // Validate the provided status
@@ -284,6 +324,11 @@ const updateTaskChecklist = async (req, res) => {
 
         if (!isAssigned && req.user.role !== "admin") {
             return res.status(403).json({ message: "You are not authorized to update this task" });
+        }
+
+        // Overdue check: Non-admins cannot update checklist if due date passed
+        if (req.user.role !== "admin" && task.dueDate < new Date()) {
+            return res.status(403).json({ message: "Mission overdue. Checklist modification restricted." });
         }
 
         // Update checklist
@@ -490,4 +535,5 @@ module.exports = {
     updateTaskChecklist,
     getDashboardData,
     getUserDashboardData,
+    attachFile,
 };

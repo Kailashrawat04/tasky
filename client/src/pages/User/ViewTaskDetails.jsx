@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
-import { FiClock, FiFlag, FiCheckCircle, FiUser, FiArrowLeft, FiMoreHorizontal } from "react-icons/fi";
+import { FiClock, FiFlag, FiCheckCircle, FiUser, FiArrowLeft, FiMoreHorizontal, FiPlus, FiLayers } from "react-icons/fi";
+import { useUserContext } from "../../context/UserContext";
 import moment from "moment";
 import toast from "react-hot-toast";
 
@@ -11,11 +12,19 @@ const ViewTaskDetails = () => {
   const navigate = useNavigate();
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useUserContext();
+
+  const isOverdue = task && new Date(task.dueDate) < new Date() && task.status !== "completed";
+
+  const [uploading, setUploading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [newDueDate, setNewDueDate] = useState("");
 
   const fetchTaskDetails = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(id));
       setTask(response.data);
+      setNewDueDate(moment(response.data.dueDate).format("YYYY-MM-DD"));
     } catch (error) {
       toast.error("Failed to load task details");
       navigate(-1);
@@ -27,6 +36,49 @@ const ViewTaskDetails = () => {
   useEffect(() => {
     fetchTaskDetails();
   }, [id]);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setUploading(true);
+    try {
+      await axiosInstance.post(API_PATHS.TASKS.ATTACH_FILE(id), formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      toast.success("File attached successfully");
+      fetchTaskDetails();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to attach file");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleExtendDueDate = async () => {
+    try {
+      await axiosInstance.put(API_PATHS.TASKS.UPDATE_TASK(id), { dueDate: newDueDate });
+      toast.success("Due date extended successfully");
+      setShowDatePicker(false);
+      fetchTaskDetails();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to extend due date");
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!window.confirm("Are you sure you want to delete this task?")) return;
+    try {
+      await axiosInstance.delete(API_PATHS.TASKS.DELETE_TASK(id));
+      toast.success("Task deleted successfully");
+      navigate(-1);
+    } catch (error) {
+      toast.error("Failed to delete task");
+    }
+  };
 
   const handleStatusChange = async (newStatus) => {
     try {
@@ -81,9 +133,20 @@ const ViewTaskDetails = () => {
           <FiArrowLeft />
           Back to Workspace
         </button>
-        <button className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-navy transition-all shadow-sm">
-          <FiMoreHorizontal size={20} />
-        </button>
+        <div className="flex items-center gap-3">
+          {user?.role === "admin" && (
+            <button
+              onClick={handleDeleteTask}
+              className="p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-sm"
+              title="Delete Task"
+            >
+              <FiMoreHorizontal size={20} className="rotate-90" />
+            </button>
+          )}
+          <button className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-navy transition-all shadow-sm">
+            <FiMoreHorizontal size={20} />
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -95,10 +158,37 @@ const ViewTaskDetails = () => {
                 {task.priority} Priority
               </span>
               <div className="w-[1px] h-6 bg-slate-100" />
-              <div className="flex items-center gap-2.5 text-slate-400 text-[11px] font-bold uppercase tracking-widest">
-                <FiClock className="text-primary" />
-                Target {moment(task.dueDate).format("MMM DD, YYYY")}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2.5 text-slate-400 text-[11px] font-bold uppercase tracking-widest">
+                  <FiClock className="text-primary" />
+                  Target {moment(task.dueDate).format("MMM DD, YYYY")}
+                </div>
+                {user?.role === "admin" && (
+                  <button
+                    onClick={() => setShowDatePicker(!showDatePicker)}
+                    className="text-[10px] font-black text-primary hover:underline uppercase tracking-widest"
+                  >
+                    {showDatePicker ? "Cancel" : "Extend Mission"}
+                  </button>
+                )}
               </div>
+
+              {showDatePicker && (
+                <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2">
+                  <input
+                    type="date"
+                    value={newDueDate}
+                    onChange={(e) => setNewDueDate(e.target.value)}
+                    className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-bold outline-none focus:border-primary"
+                  />
+                  <button
+                    onClick={handleExtendDueDate}
+                    className="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:bg-blue-600 active:scale-95 transition-all"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              )}
             </div>
 
             <h1 className="text-4xl font-black text-navy leading-tight tracking-tight">
@@ -110,6 +200,43 @@ const ViewTaskDetails = () => {
               <p className="text-slate-600 leading-relaxed text-lg font-medium">
                 {task.description || "No description provided."}
               </p>
+            </div>
+
+            {/* Attachments Section */}
+            <div className="space-y-4 pt-6 border-t border-slate-50">
+              <div className="flex items-center justify-between">
+                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Deployment Assets</h3>
+                {user?.role === "admin" && (
+                  <label className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg cursor-pointer hover:bg-slate-100 transition-all group">
+                    <FiPlus className="text-slate-400 group-hover:text-primary transition-colors" />
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Attach File</span>
+                    <input type="file" className="hidden" onChange={handleFileUpload} disabled={uploading} />
+                  </label>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {task.attachments?.map((file, idx) => (
+                  <a
+                    key={idx}
+                    href={`http://localhost:8000${file}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-[20px] hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-primary/5 group-hover:text-primary transition-all">
+                      <FiLayers size={18} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-black text-navy truncate tracking-tight">{file.split("-").slice(1).join("-") || file}</p>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Asset {idx + 1}</p>
+                    </div>
+                  </a>
+                ))}
+                {(!task.attachments || task.attachments.length === 0) && (
+                  <p className="text-slate-300 text-[10px] font-bold uppercase tracking-widest italic">No assets deployed for this mission.</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -136,10 +263,17 @@ const ViewTaskDetails = () => {
               {task.todoChecklist?.map((todo, index) => (
                 <div
                   key={index}
-                  onClick={() => handleToggleChecklist(index)}
-                  className={`flex items-center gap-5 p-5 rounded-[24px] cursor-pointer transition-all border-2 ${todo.isCompleted
-                    ? "bg-slate-50/50 border-transparent text-slate-400"
-                    : "bg-white border-slate-100 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 text-navy"
+                  onClick={() => {
+                    if (isOverdue && user?.role !== "admin") {
+                      toast.error("Mission overdue. Controls restricted.");
+                      return;
+                    }
+                    handleToggleChecklist(index);
+                  }}
+                  className={`flex items-center gap-5 p-5 rounded-[24px] transition-all border-2 ${isOverdue && user?.role !== "admin" ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+                    } ${todo.isCompleted
+                      ? "bg-slate-50/50 border-transparent text-slate-400"
+                      : "bg-white border-slate-100 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 text-navy"
                     }`}
                 >
                   <div className={`w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all duration-300 ${todo.isCompleted ? "bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/20" : "border-slate-200 bg-white"
@@ -162,17 +296,29 @@ const ViewTaskDetails = () => {
 
         <div className="space-y-10">
           {/* Status Control */}
-          <div className="glass-card p-8 rounded-[32px] space-y-8">
+          <div className="glass-card p-8 rounded-[32px] space-y-8 relative overflow-hidden">
+            {isOverdue && user?.role !== "admin" && (
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6 text-center">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 mb-4 shadow-inner">
+                  <FiClock size={24} />
+                </div>
+                <h4 className="text-[11px] font-black text-rose-500 uppercase tracking-[0.2em] mb-2">Mission Overdue</h4>
+                <p className="text-[10px] font-bold text-slate-400 uppercase leading-relaxed tracking-tight">
+                  Target date has passed. Request an extension from command.
+                </p>
+              </div>
+            )}
             <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Update Mission Status</h3>
             <div className="grid grid-cols-1 gap-3">
               {statusOptions.map((status) => (
                 <button
                   key={status}
+                  disabled={isOverdue && user?.role !== "admin"}
                   onClick={() => handleStatusChange(status)}
                   className={`w-full p-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] transition-all border-2 ${task.status === status
                     ? "bg-navy text-white border-navy shadow-2xl shadow-navy/20 active:scale-95"
                     : "bg-white text-slate-400 border-slate-50 hover:bg-slate-50 hover:text-navy hover:border-slate-200"
-                    }`}
+                    } ${isOverdue && user?.role !== "admin" ? "opacity-40 cursor-not-allowed" : ""}`}
                 >
                   {status.replace("-", " ")}
                 </button>

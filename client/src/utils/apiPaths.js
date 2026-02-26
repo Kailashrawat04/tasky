@@ -26,6 +26,7 @@ export const API_PATHS = {
 
     UPDATE_TASK_STATUS: (taskId, status) => `/tasks/${taskId}/status`, // Update task status
     UPDATE_TODO_CHECKLIST: (taskId) => `/tasks/${taskId}/todo`, // Update todo checklist
+    ATTACH_FILE: (taskId) => `/tasks/${taskId}/attach`, // Attach file to task
   },
   REPORTS: {
     EXPORT_TASKS: "/reports/export/tasks", // Download all tasks as an Excel/PDF report

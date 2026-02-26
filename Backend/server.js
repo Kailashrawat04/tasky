@@ -20,6 +20,7 @@ app.use(
 
 //Middleware
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 //CONNECT TO DATABASE
 connectDB();
