@@ -70,15 +70,11 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-navy tracking-tight">Admin Dashboard</h1>
-          <p className="text-slate-500 font-medium mt-1">
-            Welcome back, Admin. Here's a summary of the workspace activities.
-          </p>
-        </div>
-        <div className="flex gap-3">
-        </div>
+      <div>
+        <h1 className="text-2xl font-black text-navy tracking-tight">Overview</h1>
+        <p className="text-slate-500 font-medium mt-1 text-sm">
+          Here's a summary of the workspace activities.
+        </p>
       </div>
 
       {/* Stats Grid */}
@@ -88,24 +84,28 @@ const Dashboard = () => {
           value={statistics?.totalTasks || 0}
           icon={<FiBox />}
           color="text-slate-600 bg-slate-100"
+          badge={{ label: "+12%", color: "green" }}
         />
         <StatCard
           title="Pending"
           value={statistics?.pendingTasks || 0}
           icon={<FiClock />}
           color="text-amber-600 bg-amber-100"
+          badge={{ label: "Active", color: "yellow" }}
         />
         <StatCard
           title="Completed"
           value={statistics?.completedTasks || 0}
           icon={<FiCheckCircle />}
           color="text-emerald-600 bg-emerald-100"
+          badge={{ label: "Done", color: "blue" }}
         />
         <StatCard
           title="Overdue"
           value={statistics?.overdueTasks || 0}
           icon={<FiAlertCircle />}
           color="text-rose-600 bg-rose-100"
+          badge={{ label: "Urgent", color: "red" }}
         />
       </div>
 

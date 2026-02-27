@@ -156,8 +156,13 @@ const ManageUsers = () => {
                         <FiEdit2 size={18} />
                       </button>
                       <button
-                        onClick={() => handleDeleteUser(user._id)}
-                        className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all shadow-sm border border-transparent hover:border-rose-100"
+                        onClick={() => user.role !== "admin" && handleDeleteUser(user._id)}
+                        disabled={user.role === "admin"}
+                        title={user.role === "admin" ? "Admin accounts cannot be deleted" : "Delete user"}
+                        className={`p-2.5 rounded-xl transition-all shadow-sm border ${user.role === "admin"
+                            ? "text-slate-300 border-transparent cursor-not-allowed opacity-40"
+                            : "text-slate-400 hover:text-rose-600 hover:bg-rose-50 border-transparent hover:border-rose-100"
+                          }`}
                       >
                         <FiTrash2 size={18} />
                       </button>
