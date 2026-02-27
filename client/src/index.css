@@ -23,11 +23,15 @@
     }
 }
 
-@layer components {
-    @utility glass-card {
-        @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
-    }
+@utility glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+}
 
+@utility stat-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl p-8 rounded-3xl flex flex-col gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 active:scale-[0.98];
+}
+
+@layer components {
     .sidebar-link {
         @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-slate-400 hover:text-white hover:bg-white/10 mx-2;
     }
@@ -42,9 +46,5 @@
 
     .btn-primary {
         @apply w-full text-sm font-semibold text-white bg-primary shadow-lg shadow-primary/20 px-6 py-3 rounded-xl my-1 hover:bg-blue-600 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2;
-    }
-
-    .stat-card {
-        @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl p-8 rounded-3xl flex flex-col gap-3 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 active:scale-[0.98];
     }
 }
