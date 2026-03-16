@@ -1,93 +1,214 @@
-Initial Setup
+# 🧠 Tasky – Intelligent Workflow & Task Orchestration System
 
-Task 1: Setting Up React App ✔️
+---
+## 🎯 Overview
 
-Task 2: Tailwind CSS v4 Setup ✔️
+**Tasky** is a full-stack Task Management Web Application built using the MERN Stack (MongoDB, Express, React, Node.js).
 
-Task 3: Creating Required Files and Folders ✔️
+It helps individuals and teams organize, track, and manage tasks efficiently through a centralized dashboard.
 
-Task 4: Defining App Routes✔️
+Users can create tasks, monitor progress, manage users, and visualize productivity through interactive charts and analytics.
 
-Backend
-Task 5: Backend Project Setup✔️
+This project is developed as part of a B.Tech Major Project, focusing on building a scalable workflow management system with modern web technologies.
 
-Task 6: Configuring MongoDB✔️
+✨ The system focuses on **simplicity**, **productivity**, and **intuitive UI** design for everyday task management.
 
-Task 7: Defining User MongoDB Schema✔️
+## ⚙️ Features
 
-Task 8: Defining Task MongoDB Schema✔️
+- 📋 **Task Management** – Create, update, delete, and manage tasks efficiently.
 
-Task 9: Creating Authentication APIs (Login, Sign-Up, Get User Info, Profile Image Upload)✔️
+- 🔐 **Authentication System** – Secure user signup and login functionality.
 
-Task 10: Creating User Management APIs (Get All Users and Get a Specific User Details)
+- 📊 **Dashboard Analytics** – Visual representation of task progress using charts.
 
-Task 11: Creating Task Management APIs (Get All Tasks, Create Task, Update Task, Update Task Status, etc.)✔️
+- 👨‍💼 **Admin Dashboard** – Admin can monitor tasks and manage users.
 
-Task 12: Creating Report Generation APIs✔️
+- 📥 **Report Generation** – Download detailed reports of tasks and user activities.
 
-Frontend (Continued)
-Task 13 : Building the Login Form UI✔️
+- 📈 **Task Status Tracking** – Track task progress such as pending, in progress, and completed.
 
-Task 14 : Building the Sign-Up Form UI✔️
+## 🧩 Tech Stack
+| Layer |	Technology |
+|-------|------------|
+| **Frontend** | React (Vite) + Tailwind CSS |
+| **Backend** |	Node.js + Express.js |
+| **Database** | MongoDB + MongoDB Atlas |
+| **Charts** |	Recharts |
+| **API Communication** |	Axios |
+| **Version Control** |	Git + GitHub |
 
-Task: Defining API Paths✔️
+---
 
-Task: Creating Axios Instance
+## 🗂️ Project Structure
 
-Task: Integrating Login API
+```bash
+tasky/
+│
+├── Backend/                          # Node.js + Express backend
+│   │
+│   ├── config/                       # Configuration files (DB connection etc.)
+│   │
+│   ├── controllers/                  # Business logic for APIs
+│   │
+│   ├── middlewares/                  # Authentication & request middleware
+│   │
+│   ├── models/                       # MongoDB schemas (User, Task)
+│   │
+│   ├── routes/                       # API route definitions
+│   │
+│   ├── uploads/                      # Uploaded profile images or files
+│   │
+│   ├── .env                          # Environment variables
+│   │
+│   ├── package.json                  # Backend dependencies
+│   ├── package-lock.json
+│   │
+│   └── server.js                     # Express server entry point
+│
+│
+├── Frontend/                           # React + Vite frontend
+│   │
+│   ├── hooks/                        # Custom React hooks
+│   │
+│   ├── src/                          # Main source code
+│   │   ├── components/               # Reusable UI components
+│   │   ├── pages/                    # Application pages
+│   │   ├── assets/                   # Images, icons, static files
+│   │   ├── utils/                    # Helper functions
+│   │   └── App.jsx                   # Main React component
+│   │
+│   ├── index.html                    # Application entry HTML
+│   │
+│   ├── package.json                  # Frontend dependencies
+│   ├── package-lock.json
+│   │
+│   ├── vite.config.js                # Vite configuration
+│   └── eslint.config.js              # ESLint configuration
+│
+│
+└── README.md                         # Project documentation
+```
+---
 
-Task: Integrating Sign-Up API✔️
+## 🚀 How It Works
+1. **User Authentication**
 
-Dashboard Page
-Task: Creating the Dashboard Page Layout
+   - Users first create an account through the **sign-up page**.
+   - The system verifies credentials and allows users to securely log in.
+   - JWT authentication ensures secure communication between frontend and backend.
 
-Task: API Call to Fetch Dashboard Data
+2. **Task Creation**
 
-Task: Creating Summary Section
+   - Admins can create tasks by providing details such as:
 
-Task: Creating Recent Tasks Section
+   • Task title
+   • Task description
+   • Priority level
+   • Assigned user
 
-Task: Creating Task Distribution Section (Pie Chart)
+   - These tasks are stored in the MongoDB database.
 
-Task: Creating Task Priority Levels Section (Bar Chart)
+3. **Task Management**
 
-Create Task Page
-Task: Building Create Task Form
+   - The platform allows users to:
 
-Task: Validating Create Task Form
+   • View assigned tasks
+   • Update task details
+   • Change task status
+   • Track progress
 
-Task: Integrating Create Task API
+   - This enables efficient workflow tracking.
 
-Manage Tasks Page
-Task: API Call to Get All Tasks
+4. **Dashboard Visualization**
 
-Task: Creating Tab Filters
+   - The dashboard displays analytics including:
 
-Task: Displaying Task Cards in a Grid
+   • Total tasks
+   • Pending tasks
+   • Completed tasks
+   • Task distribution charts
 
-Update Task Page
-Task: Calling Get Task Details By Task ID API
+   - Charts help users quickly understand productivity trends.
 
-Task: Integrating Update Task API
+5. **Report Generation**
 
-Task: Integrating Delete Task API
+   - Admins can generate downloadable reports that summarize:
 
-Manage Users Page
-Task: Calling Get All User Details API
+   • Tasks assigned to users
+   • Task completion statistics
+   • Overall productivity metrics
 
-Task: User Card UI
+   - This helps in tracking performance and project progress.
 
-Report Download
-Task: Download All Users Task Report
+## 🧠 API Endpoints
+🔐 1. **Authentication APIs**
+```bash
+POST /auth/signup
+Create a new user account.
 
-Task: Download Detailed Task Report
+POST /auth/login
+Authenticate user credentials and return a token.
 
-User Dashboard
-Task: User Dashboard with Summary Card and Charts
+GET /auth/user
+Fetch logged-in user information.
+```
+📋 2. **Task Management APIs**
+```bash
+GET /tasks
+Fetch all tasks.
 
-Task: My Tasks Page UI
+POST /tasks/create
+Create a new task.
 
-Task: View Task Details Page
+PUT /tasks/update/:id
+Update task details.
 
-Task: API Call to Update Task Status and Todo Checklist
+PATCH /tasks/status/:id
+Update task status.
 
+DELETE /tasks/:id
+Delete a task.
+```
+📊 3. **Reporting APIs**
+```bash
+GET /reports/tasks
+Generate detailed task reports.
+
+GET /reports/users
+Generate user activity reports.
+```
+---
+
+## 🖥️ Setup & Run
+🔹 **Backend Setup**
+```bash
+cd backend
+npm install
+npm run dev
+```
+🔹 **Frontend Setup**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+
+Then open the link shown in your terminal
+(usually http://localhost:5173/).
+
+---
+
+## 🎓 About the Project
+
+This project was developed as part of a Major Project during B.Tech in Computer Science Engineering.
+
+The goal of this project is to design and implement a modern task management system that demonstrates full-stack development using the **MERN Stack (MongoDB, Express, React, Node.js)**. The system focuses on improving productivity and workflow organization through task tracking, dashboards, and analytics.
+
+This project was developed collaboratively by:
+
+**Kailash (Group Leader)** – Responsible for designing and implementing the **backend architecture**, including **API development**, **database integration**, and **server-side logic**.
+
+**Meghansh** – Responsible for developing the **frontend interface**, including UI design, dashboard components, and integration of frontend features with backend APIs.
+
+Together, the project demonstrates a complete full-stack web application workflow, combining backend services with an interactive frontend to create an efficient task management platform.
