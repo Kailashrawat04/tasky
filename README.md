@@ -212,3 +212,5 @@ This project was developed collaboratively by:
 **Meghansh** – Responsible for developing the **frontend interface**, including UI design, dashboard components, and integration of frontend features with backend APIs.
 
 Together, the project demonstrates a complete full-stack web application workflow, combining backend services with an interactive frontend to create an efficient task management platform.
+
+***Thanks For Reading this*** 
